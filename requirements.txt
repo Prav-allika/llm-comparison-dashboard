@@ -3,11 +3,14 @@
 # ==============================================
 
 # Web Interface
-gradio>=4.0.0
+gradio>=4.44.0
 
 # AI/ML Libraries
 transformers>=4.30.0
 torch>=2.0.0
+
+torch>=2.0.0
+
 
 # Text Analysis
 textstat>=0.7.3
