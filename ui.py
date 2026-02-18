@@ -135,7 +135,7 @@ def create_interface():
     Now with Charts and Export!
     """
     # container for the entire app, with custom CSS and theme
-    with gr.Blocks(css=CSS_STYLES, theme=gr.themes.Glass()) as demo:
+    with gr.Blocks(css=CSS_STYLES) as demo:
         # Header
         gr.Markdown(
             """
