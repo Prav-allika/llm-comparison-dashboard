@@ -1,28 +1,4 @@
-# ==============================================
-# LLM Evaluation Dashboard - Requirements
-# ==============================================
-
-# Web Interface
-gradio==4.36.0
-
-# AI/ML Libraries
 transformers>=4.30.0
 torch>=2.0.0
-
-
-# Data Visualization
+textstat>=0.7.3
 plotly>=5.18.0
-
-# Database (built into Python)
-# sqlite3 is part of standard library
-
-# ==============================================
-# Optional: For HuggingFace Spaces deployment
-# ==============================================
-# huggingface_hub>=0.22.0,<0.24.0
-
-# ==============================================
-# Development Tools (optional)
-# ==============================================
-# black  # Code formatting
-# pytest # Testing
