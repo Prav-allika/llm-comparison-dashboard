@@ -3,12 +3,10 @@
 # ==============================================
 
 # Web Interface
-gradio>=4.44.0
-
+gradio==4.36.0
+huggingface_hub>=0.22.0,<0.24.0
 # AI/ML Libraries
 transformers>=4.30.0
-torch>=2.0.0
-
 torch>=2.0.0
 
 
