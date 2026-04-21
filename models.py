@@ -34,17 +34,30 @@ loaded_models = {}
 
 def get_device():
     """
-    Detect the best available device for model inference
-
-    Returns:
-    - Device string for transformers pipeline
+    Detect the best available device for model inference.
+    Validates the configured DEVICE is actually available before using it.
     """
-    if DEVICE != "auto":
-        return DEVICE
-
     try:
         import torch
 
+        if DEVICE == "cuda":
+            if torch.cuda.is_available():
+                print(" CUDA GPU detected!")
+                return "cuda"
+            print(" CUDA not available, falling back to CPU")
+            return "cpu"
+
+        if DEVICE == "mps":
+            if torch.backends.mps.is_available():
+                print(" Apple Silicon GPU (MPS) detected!")
+                return "mps"
+            print(" MPS not available, falling back to CPU")
+            return "cpu"
+
+        if DEVICE == "cpu":
+            return "cpu"
+
+        # auto-detect
         if torch.cuda.is_available():
             print(" CUDA GPU detected!")
             return "cuda"
@@ -54,7 +67,7 @@ def get_device():
         else:
             print(" Using CPU")
             return "cpu"
-    except:
+    except Exception:
         print(" Using CPU (torch not fully available)")
         return "cpu"
 
@@ -79,10 +92,11 @@ def load_all_models():
 
             dtype = torch.float16 if device in ("mps", "cuda") else torch.float32
             loaded_models[display_name] = pipeline(
-                "text-generation",  # task type
-                model=model_name,  # from config.py
-                device=device,  # pass device string directly ("mps", "cuda", or "cpu")
-                torch_dtype=dtype,  # float16 halves memory and speeds up on Apple Silicon/GPU
+                "text-generation",
+                model=model_name,
+                device=device,
+                torch_dtype=dtype,
+                low_cpu_mem_usage=True,
             )
             elapsed = time.time() - start_time  # elapsed time for loading this model
             print(f" {display_name} loaded in {elapsed:.2f}s!")
