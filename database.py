@@ -243,7 +243,7 @@ def delete_generation(generation_id):
     c.execute("DELETE FROM generations WHERE id = ?", (generation_id,))
     conn.commit()
     conn.close()
-    print(f"🗑️ Deleted generation #{generation_id}")
+    print(f"c Deleted generation #{generation_id}")
 
 
 def clear_all_history():
@@ -253,4 +253,4 @@ def clear_all_history():
     c.execute("DELETE FROM generations")
     conn.commit()
     conn.close()
-    print("🗑️ All history cleared!")
+    print(" All history cleared!")

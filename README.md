@@ -1,117 +1,129 @@
-# 🤖 AI Text Comparison Dashboard
+---
+title: AI Text Comparison Dashboard
+colorFrom: orange
+colorTo: red
+sdk: gradio
+sdk_version: 4.8.0
+app_file: app.py
+pinned: false
+---
+
+# AI Text Comparison Dashboard
 
 <div align="center">
 
-[![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Prav04/llm-comparison-dashboard)
-[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Available-brightgreen)](https://huggingface.co/spaces/Prav04/llm-comparison-dashboard)
+[![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/Prav04/llm-comparison-dashboard)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen)](https://huggingface.co/spaces/Prav04/llm-comparison-dashboard)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![Gradio](https://img.shields.io/badge/Gradio-4.0+-FF7C00?logo=gradio&logoColor=white)](https://gradio.app)
-[![Transformers](https://img.shields.io/badge/🤗%20Transformers-Latest-yellow)](https://huggingface.co/transformers)
+[![Transformers](https://img.shields.io/badge/Transformers-Latest-yellow)](https://huggingface.co/transformers)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 <p align="center">
-  <strong>A comprehensive dashboard for comparing text generation from multiple GPT-2 models with automatic quality evaluation, sentiment analysis, and interactive visualizations.</strong>
+  <strong>A dashboard for comparing text generation from multiple local language models with automatic quality evaluation, sentiment analysis, and interactive visualizations.</strong>
 </p>
 
 [Live Demo](https://huggingface.co/spaces/Prav04/llm-comparison-dashboard) •
-[Features](#-features) •
-[Installation](#-installation) •
-[Tech Stack](#-tech-stack) •
-[Screenshots](#-screenshots)
+[Features](#features) •
+[Installation](#installation) •
+[Tech Stack](#tech-stack) •
+[Screenshots](#screenshots)
 
 </div>
 
 ---
 
-## 🌟 Live Demo
+## Live Demo
 
 **Try the app now:** [**https://huggingface.co/spaces/Prav04/llm-comparison-dashboard**](https://huggingface.co/spaces/Prav04/llm-comparison-dashboard)
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Screenshots](#-screenshots)
-- [Project Architecture](#-project-architecture)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Usage](#-usage)
-- [API Reference](#-api-reference)
-- [Deployment](#-deployment)
-- [Future Improvements](#-future-improvements)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Author](#-author)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Screenshots](#screenshots)
+- [Project Architecture](#project-architecture)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+- [Deployment](#deployment)
+- [Future Improvements](#future-improvements)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
 ---
 
-## ✨ Features
+## Features
 
 <table>
 <tr>
 <td width="50%">
 
-### 🤖 Multi-Model Comparison
-Compare outputs from 3 GPT-2 variants simultaneously:
-- **DistilGPT-2** (82M params) - Fastest
-- **GPT-2 Standard** (124M params) - Balanced
-- **GPT-2 Medium** (355M params) - Best quality
+### Multi-Model Comparison
+Compare outputs from 3 local language models simultaneously:
+- **SmolLM3-3B** (HuggingFace 2026) — 3B parameters, strong quality on Apple Silicon
+- **DeepSeek-R1-1.5B** (2025) — 1.5B parameters, reasoning focused
+- **Qwen2.5-0.5B** (Alibaba 2025) — 0.5B parameters, fastest inference
 
 </td>
 <td width="50%">
 
-### 📊 Automatic Quality Metrics
-Real-time text evaluation:
-- **Word Count** - Total words generated
-- **Diversity Score** - Vocabulary richness percentage
-- **Readability Score** - Flesch reading ease
-- **Grade Level** - US education level required
+### Automatic Quality Metrics
+Real-time text evaluation per model:
+- **Word Count** — Total words generated
+- **Diversity Score** — Vocabulary richness percentage
+- **Readability Score** — Flesch reading ease
+- **Grade Level** — US education level required
 
 </td>
 </tr>
 <tr>
 <td width="50%">
 
-### 😊 Sentiment Analysis
-AI-powered emotion detection:
-- Uses DistilBERT fine-tuned model
-- Classifies as POSITIVE/NEGATIVE
-- Shows confidence percentage
-- Visual emoji indicators
+### Sentiment Analysis
+AI-powered emotion detection using DistilBERT:
+- Fine-tuned on SST-2 dataset
+- Classifies output as POSITIVE or NEGATIVE
+- Shows confidence percentage per model
+- Can be toggled on/off in config
 
 </td>
 <td width="50%">
 
-### 📈 Interactive Charts
-Beautiful Plotly visualizations:
+### Interactive Charts
+Plotly visualizations generated live and historically:
 - Diversity comparison bar charts
+- Metrics radar chart
 - Response time comparison
 - Historical trend line charts
 - Model usage pie charts
+- Sentiment distribution chart
 
 </td>
 </tr>
 <tr>
 <td width="50%">
 
-### 💾 Database Storage
+### Database Storage
 Persistent history with SQLite:
-- Auto-saves all generations
+- Auto-saves every generation
 - Track metrics over time
-- Filter and search history
+- Configurable history limit
 - Export to CSV
 
 </td>
 <td width="50%">
 
-### ⚡ Performance Features
-Optimized for speed:
-- GPU auto-detection (CUDA/MPS/CPU)
-- Optional parallel processing
-- Response time tracking
-- Model caching
+### Performance Features
+Optimized for local inference:
+- GPU auto-detection (CUDA / MPS / CPU)
+- Optional parallel processing (3 workers)
+- Per-model response time tracking
+- Model caching after first load
 
 </td>
 </tr>
@@ -119,32 +131,7 @@ Optimized for speed:
 
 ---
 
-## 🛠 Tech Stack
-
-<table>
-<tr>
-<td align="center" width="96">
-<img src="https://skillicons.dev/icons?i=python" width="48" height="48" alt="Python" />
-<br>Python
-</td>
-<td align="center" width="96">
-<img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" width="48" height="48" alt="HuggingFace" />
-<br>Transformers
-</td>
-<td align="center" width="96">
-<img src="https://www.gradio.app/assets/gradio.svg" width="48" height="48" alt="Gradio" />
-<br>Gradio
-</td>
-<td align="center" width="96">
-<img src="https://images.plot.ly/logo/new-branding/plotly-logomark.png" width="48" height="48" alt="Plotly" />
-<br>Plotly
-</td>
-<td align="center" width="96">
-<img src="https://www.sqlite.org/images/sqlite370_banner.gif" width="48" height="48" alt="SQLite" />
-<br>SQLite
-</td>
-</tr>
-</table>
+## Tech Stack
 
 | Category | Technologies |
 |----------|-------------|
@@ -154,14 +141,15 @@ Optimized for speed:
 | **Visualization** | Plotly |
 | **Database** | SQLite |
 | **Text Analysis** | TextStat |
+| **Sentiment Model** | DistilBERT (SST-2) |
 | **Deployment** | HuggingFace Spaces |
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 <details>
-<summary><b>🖼️ Click to view screenshots</b></summary>
+<summary><b>Click to view screenshots</b></summary>
 
 ### Generate Tab
 Compare text generation from all models with quality metrics and sentiment analysis.
@@ -182,27 +170,27 @@ Browse past generations and view aggregate statistics.
 
 ---
 
-## 📁 Project Architecture
+## Project Architecture
 
 ```
 llm-comparison-dashboard/
 │
-├── 🚀 app.py              # Application entry point
-├── ⚙️ config.py           # Configuration settings
-├── 💾 database.py         # SQLite database operations
-├── 📊 evaluation.py       # Text quality metrics & sentiment
-├── 🤖 models.py           # AI model loading & generation
-├── 📈 charts.py           # Plotly visualization charts
-├── 🎨 ui.py               # Gradio interface components
-├── 🔧 utils.py            # Helper functions & formatting
+├── app.py              # Application entry point
+├── config.py           # Configuration settings and CSS
+├── database.py         # SQLite database operations
+├── evaluation.py       # Text quality metrics and sentiment analysis
+├── models.py           # AI model loading and generation
+├── charts.py           # Plotly visualization charts
+├── ui.py               # Gradio interface components
+├── utils.py            # Helper functions and formatting
 │
-├── 📦 requirements.txt    # Python dependencies
-├── 📖 README.md           # Documentation (this file)
-├── 📄 LICENSE             # MIT License
-└── 🗄️ generations.db      # SQLite database (auto-created)
+├── requirements.txt    # Python dependencies
+├── README.md           # Documentation (this file)
+├── LICENSE             # MIT License
+└── generations.db      # SQLite database (auto-created on first run)
 ```
 
-### Data Flow Architecture
+### Data Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -219,9 +207,9 @@ llm-comparison-dashboard/
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                      models.py                                   │
-│          ┌─────────────┬─────────────┬─────────────┐            │
-│          │ DistilGPT-2 │   GPT-2     │ GPT-2 Medium│            │
-│          └─────────────┴─────────────┴─────────────┘            │
+│     ┌─────────────┬──────────────────┬─────────────────┐        │
+│     │  SmolLM3-3B │ DeepSeek-R1-1.5B │  Qwen2.5-0.5B  │        │
+│     └─────────────┴──────────────────┴─────────────────┘        │
 └─────────────────────────────┬───────────────────────────────────┘
                               │
               ┌───────────────┼───────────────┐
@@ -234,14 +222,14 @@ llm-comparison-dashboard/
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
 - Python 3.10 or higher
 - pip package manager
-- 8GB RAM recommended
-- (Optional) NVIDIA GPU or Apple Silicon for faster inference
+- 8GB RAM recommended (models are 0.5B–3B parameters)
+- Apple Silicon (MPS), NVIDIA GPU (CUDA), or CPU
 
 ### Local Setup
 
@@ -285,21 +273,18 @@ python app.py
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
-Edit `config.py` to customize the dashboard:
+Edit **config.py** to customize the dashboard.
 
 ### Model Configuration
 
 ```python
-# Available models - add or remove as needed
 MODEL_LIST = {
-    "DistilGPT-2 (Fast)": "distilgpt2",
-    "GPT-2 (Standard)": "gpt2",
-    "GPT-2 Medium (Better)": "gpt2-medium",
-    # Uncomment to add more models:
-    # "GPT-2 Large": "gpt2-large",
-    # "GPT-Neo 125M": "EleutherAI/gpt-neo-125m",
+    "SmolLM3-3B (HuggingFace 2026)": "HuggingFaceTB/SmolLM3-3B",
+    "DeepSeek-R1-1.5B (2025)": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    "Qwen2.5-0.5B (Alibaba 2025)": "Qwen/Qwen2.5-0.5B-Instruct",
+    # Add additional HuggingFace models here
 }
 ```
 
@@ -307,56 +292,55 @@ MODEL_LIST = {
 
 ```python
 # Device settings
-DEVICE = "auto"           # auto, cuda, mps, or cpu
+DEVICE = "mps"        # auto, cuda, mps, or cpu
 
 # Parallel processing (requires 8GB+ RAM)
-ENABLE_PARALLEL = False   # Set True for faster generation
-MAX_WORKERS = 3           # Number of parallel workers
+ENABLE_PARALLEL = True   # Set False to run models sequentially
+MAX_WORKERS = 3          # Number of parallel workers
 
 # Feature toggles
-ENABLE_SENTIMENT = True   # Enable/disable sentiment analysis
+ENABLE_SENTIMENT = True  # Disable for faster generation
 ```
 
 ### Generation Defaults
 
 ```python
 DEFAULT_MAX_LENGTH = 100
-DEFAULT_CREATIVITY = 0.8
-MIN_LENGTH = 30
-MAX_LENGTH = 200
+DEFAULT_CREATIVITY = 0.7
+MIN_LENGTH = 20
+MAX_LENGTH = 300
 MIN_CREATIVITY = 0.3
 MAX_CREATIVITY = 1.0
 ```
 
 ---
 
-## 📖 Usage
+## Usage
 
 ### Basic Usage
 
-1. **Enter a prompt** in the text box
+1. **Enter a prompt** in the text box or pick a Quick Template from the dropdown
 2. **Adjust settings** using sliders:
-   - Max Length: Controls output length
-   - Creativity: Higher = more creative, lower = more focused
+   - Max Length: Controls output token length (20–300)
+   - Creativity: Higher = more creative, lower = more focused (0.3–1.0)
 3. **Click "Generate & Evaluate"**
-4. **View results** with metrics and charts
+4. **View results** — formatted cards with metrics, live charts, and sentiment scores
 
 ### Using Templates
 
-1. Select a template from the dropdown
-2. The prompt will auto-fill
-3. Modify if needed
-4. Generate!
+The dropdown provides three built-in templates (Story, Email, Essay). Selecting one auto-fills the prompt; you can edit it before generating.
 
 ### Viewing History
 
-1. Go to "View History" tab
-2. See all past generations with metrics
-3. Export to CSV for analysis
+Go to the **View History** tab to browse all past generations with their metrics. Use the record limit slider to control how many entries are shown, and click **Export to CSV** to download the full dataset.
+
+### Statistics
+
+The **Statistics** tab shows aggregate performance data per model — average diversity, readability, response time, and sentiment breakdown — loaded automatically on tab switch.
 
 ---
 
-## 📚 API Reference
+## API Reference
 
 ### Core Functions
 
@@ -368,20 +352,24 @@ MAX_CREATIVITY = 1.0
 | `analyze_sentiment()` | evaluation.py | Classify text sentiment |
 | `save_generation()` | database.py | Store results in database |
 | `get_statistics()` | database.py | Get aggregate statistics |
-| `create_diversity_comparison_chart()` | charts.py | Create bar chart |
-| `create_history_trend_chart()` | charts.py | Create trend line chart |
+| `create_diversity_comparison_chart()` | charts.py | Diversity bar chart |
+| `create_response_time_chart()` | charts.py | Response time bar chart |
+| `create_metrics_radar_chart()` | charts.py | Metrics radar chart |
+| `create_history_trend_chart()` | charts.py | Historical trend line chart |
+| `create_model_usage_pie_chart()` | charts.py | Model usage pie chart |
+| `create_sentiment_distribution_chart()` | charts.py | Sentiment distribution chart |
 
 ### Key Parameters
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `prompt` | str | Input text to continue |
-| `max_length` | int | Maximum tokens to generate |
-| `creativity` | float | Temperature (0.3-1.0) |
+| `max_length` | int | Maximum tokens to generate (20–300) |
+| `creativity` | float | Temperature for sampling (0.3–1.0) |
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 ### Deploy to HuggingFace Spaces (Free)
 
@@ -389,13 +377,13 @@ MAX_CREATIVITY = 1.0
 
 2. **Create new Space**:
    - SDK: Gradio
-   - Hardware: CPU basic (free)
+   - Hardware: CPU basic (free) or T4 GPU for faster inference
 
 3. **Upload files** via web interface or git
 
-4. **Wait for build** (~5-10 minutes)
+4. **Wait for build** (~5–10 minutes)
 
-5. **Your app is live!** 🎉
+5. **Your app is live**
 
 ### Deploy to Other Platforms
 
@@ -428,29 +416,28 @@ CMD ["python", "app.py"]
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
-- [ ] Add more models (GPT-Neo, BLOOM, LLaMA)
+- [ ] Add more models (Mistral, Phi-3, LLaMA)
 - [ ] User authentication system
 - [ ] API endpoint for programmatic access
-- [ ] Prompt templates library
+- [ ] Expanded prompt templates library
 - [ ] Export reports as PDF
-- [ ] Model fine-tuning interface
 - [ ] A/B testing mode
 - [ ] Multi-language support
-- [ ] Dark/Light theme toggle
+- [ ] Dark/light theme toggle
 - [ ] Mobile-responsive design
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome! Here's how you can help:
+Contributions are welcome. Here is how to get started:
 
 1. **Fork** the repository
-2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+2. **Create** your feature branch (`git checkout -b feature/your-feature`)
+3. **Commit** your changes (`git commit -m 'Add some feature'`)
+4. **Push** to the branch (`git push origin feature/your-feature`)
 5. **Open** a Pull Request
 
 ### Development Setup
@@ -473,13 +460,13 @@ git push origin feature/your-feature
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👩‍💻 Author
+## Author
 
 <div align="center">
 
@@ -488,17 +475,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ML Engineer | NLP Enthusiast | Building AI Solutions
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/your-profile)
-[![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Profile-yellow?style=for-the-badge)](https://huggingface.co/Prav04)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Profile-yellow?style=for-the-badge)](https://huggingface.co/Prav04)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github)](https://github.com/Prav-allika)
 
 </div>
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [HuggingFace](https://huggingface.co) for Transformers library and free hosting
-- [Gradio](https://gradio.app) for the amazing UI framework
+- [Gradio](https://gradio.app) for the UI framework
 - [Plotly](https://plotly.com) for interactive visualizations
 - [TextStat](https://github.com/shivam5992/textstat) for readability metrics
 
@@ -506,10 +493,6 @@ ML Engineer | NLP Enthusiast | Building AI Solutions
 
 <div align="center">
 
-### ⭐ If you found this project useful, please give it a star!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Prav-allika/llm-comparison-dashboard&type=Date)](https://star-history.com/#Prav-allika/llm-comparison-dashboard&Date)
-
-**Built with ❤️ for the ML community**
+**Built for the ML community**
 
 </div>

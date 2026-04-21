@@ -21,6 +21,11 @@ from config import MODEL_LIST, ENABLE_PARALLEL, MAX_WORKERS, DEVICE, ENABLE_SENT
 from evaluation import evaluate_text, get_best_model, analyze_sentiment
 from database import save_generation
 
+import torch
+
+if torch.backends.mps.is_available():
+    torch.mps.empty_cache()
+
 warnings.filterwarnings("ignore")
 
 # Global variable to store loaded models
@@ -70,12 +75,14 @@ def load_all_models():
         start_time = time.time()
 
         try:
-            # Note: device=-1 for CPU, device=0 for GPU
-            device_num = -1 if device == "cpu" else 0
+            import torch
+
+            dtype = torch.float16 if device in ("mps", "cuda") else torch.float32
             loaded_models[display_name] = pipeline(
                 "text-generation",  # task type
                 model=model_name,  # from config.py
-                device=device_num,  # automatically use GPU if available, otherwise CPU
+                device=device,  # pass device string directly ("mps", "cuda", or "cpu")
+                torch_dtype=dtype,  # float16 halves memory and speeds up on Apple Silicon/GPU
             )
             elapsed = time.time() - start_time  # elapsed time for loading this model
             print(f" {display_name} loaded in {elapsed:.2f}s!")
@@ -123,6 +130,7 @@ def generate_single(model_name, prompt, max_length, creativity):
             no_repeat_ngram_size=3,  # prevent repeating the same 3-word sequences for more diverse output
             truncation=True,  # truncate inputs that are too long for the model
             pad_token_id=generator.tokenizer.eos_token_id,  # some models require a pad token, use EOS token as fallback
+            max_length=None,
         )
 
         response_text = output[0][

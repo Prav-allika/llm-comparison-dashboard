@@ -25,12 +25,8 @@ from ui import create_interface
 def print_banner():
     """Print a nice startup banner"""
     print("\n")
-    print("╔" + "═" * 58 + "╗")
-    print("║" + " " * 58 + "║")
-    print("║" + "🤖 AI Text Comparison Dashboard".center(58) + "║")
-    print("║" + "Enhanced with Sentiment Analysis & Charts".center(58) + "║")
-    print("║" + " " * 58 + "║")
-    print("╚" + "═" * 58 + "╝")
+    print("  AI Text Comparison Dashboard")
+    print("  Enhanced with Sentiment Analysis & Charts")
     print()
 
 
@@ -47,30 +43,29 @@ def main():
     print_banner()
 
     # Step 1: Initialize database
-    print("📁 Step 1: Initializing database...")
+    print("Step 1: Initializing database...")
     init_database()
 
     # Step 2: Load AI models
-    print("\n🤖 Step 2: Loading AI models...")
+    print("\nStep 2: Loading AI models...")
     load_all_models()
 
     # Step 3: Load sentiment analyzer
     if ENABLE_SENTIMENT:
-        print("\n Step 3: Loading sentiment analyzer...")
+        print("\nStep 3: Loading sentiment analyzer...")
         load_sentiment_analyzer()
     else:
-        print("\n⏭ Step 3: Sentiment analysis disabled (skip)")
+        print("\nStep 3: Sentiment analysis disabled (skip)")
 
     # Step 4: Create and launch UI
-    print("\n Step 4: Creating user interface...")
+    print("\nStep 4: Creating user interface...")
     demo = create_interface()
 
-    print("\n" + "=" * 60)
-    print(" All systems ready!")
-    print(f"🌐 Local URL:  http://127.0.0.1:{SERVER_PORT}")
+    print("\nAll systems ready!")
+    print(f"Local URL: http://127.0.0.1:{SERVER_PORT}")
     if SHARE_APP:
-        print("🌍 Public URL will be generated...")
-    print("=" * 60 + "\n")
+        print("Public URL will be generated...")
+    print()
 
     # Launch the app
     demo.launch(

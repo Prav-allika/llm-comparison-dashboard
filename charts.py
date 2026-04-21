@@ -9,6 +9,12 @@ import plotly.graph_objects as go
 # get data from database for charts
 from database import get_chart_data
 
+# import current model list to filter charts to only show active models
+from config import MODEL_LIST
+
+# Set of display names for the 3 currently configured models
+CURRENT_MODELS = set(MODEL_LIST.keys())
+
 
 def create_diversity_comparison_chart(
     results,
@@ -18,7 +24,7 @@ def create_diversity_comparison_chart(
     """
     models = []
     diversity_scores = []
-    colors = ["#FF6B6B", "#4ECDC4", "#45B7D1"]
+    colors = ["#E85555", "#F0A490", "#A8CC88"]
 
     for (
         name,
@@ -48,12 +54,15 @@ def create_diversity_comparison_chart(
     )
 
     fig.update_layout(  # Update layout with titles and axis labels
-        title="📊 Diversity Score Comparison",
+        title="Diversity Score Comparison",
         xaxis_title="Model",
         yaxis_title="Diversity (%)",
-        yaxis_range=[0, 100],
-        template="plotly_dark",
-        height=400,
+        yaxis_range=[0, 115],      # extra headroom so "outside" labels aren't clipped
+        template="plotly_white",
+        paper_bgcolor="#FEF5F2",  # match page background
+        plot_bgcolor="#FFFFFF",   # white chart area
+        font=dict(color="#1A1A1A"),  # dark text for readability
+        height=420,               # slightly taller to give more label space
         showlegend=False,  # Hide legend since we have only one bar per model
     )
 
@@ -68,7 +77,7 @@ def create_metrics_radar_chart(
     """
     fig = go.Figure()
 
-    colors = ["#FF6B6B", "#4ECDC4", "#45B7D1"]
+    colors = ["#E85555", "#F0A490", "#A8CC88"]
     color_idx = 0
 
     for name, data in results.items():
@@ -102,8 +111,11 @@ def create_metrics_radar_chart(
 
     fig.update_layout(  # layout for radar chart with titles and axis settings
         polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
-        title="📈 Model Metrics Comparison (Radar)",
-        template="plotly_dark",
+        title="Model Metrics Comparison (Radar)",
+        template="plotly_white",
+        paper_bgcolor="#FEF5F2",  # match page background
+        plot_bgcolor="#FFFFFF",   # white chart area
+        font=dict(color="#1A1A1A"),  # dark text for readability
         height=450,
         showlegend=True,
     )
@@ -119,7 +131,7 @@ def create_response_time_chart(
     """
     models = []
     times = []
-    colors = ["#FF6B6B", "#4ECDC4", "#45B7D1"]
+    colors = ["#E85555", "#F0A490", "#A8CC88"]
 
     for name, data in results.items():
         if name not in ["Generation Stats", "Recommendation"]:
@@ -130,8 +142,11 @@ def create_response_time_chart(
     if not models:
         fig = go.Figure()
         fig.update_layout(
-            title="⏱️ Response Time (No data yet)",
-            template="plotly_dark",
+            title="Response Time (No data yet)",
+            template="plotly_white",
+            paper_bgcolor="#FEF5F2",
+            plot_bgcolor="#FFFFFF",
+            font=dict(color="#1A1A1A"),
             height=300,
         )
         return fig
@@ -149,11 +164,15 @@ def create_response_time_chart(
     )
 
     fig.update_layout(
-        title="⏱️ Response Time per Model",
+        title="Response Time per Model",
         xaxis_title="Model",
         yaxis_title="Time (seconds)",
-        template="plotly_dark",
-        height=300,
+        yaxis=dict(range=[0, max(times) * 1.25]),  # 25% headroom so labels aren't clipped
+        template="plotly_white",
+        paper_bgcolor="#FEF5F2",  # match page background
+        plot_bgcolor="#FFFFFF",   # white chart area
+        font=dict(color="#1A1A1A"),  # dark text for readability
+        height=340,               # slightly taller to give more label space
         showlegend=False,
     )
 
@@ -171,13 +190,16 @@ def create_history_trend_chart():  # chart to show diversity trends over time in
     if not data:
         fig = go.Figure()
         fig.update_layout(
-            title="📈 Diversity Trend Over Time (No data yet)",
-            template="plotly_dark",
+            title="Diversity Trend Over Time (No data yet)",
+            template="plotly_white",
+            paper_bgcolor="#FEF5F2",
+            plot_bgcolor="#FFFFFF",
+            font=dict(color="#1A1A1A"),
             height=400,
         )
         return fig
 
-    # Group by model
+    # Group by model, filtering to only the 3 currently configured models
     model_data = {}
     for row in data:
         # FIXED: Unpack all 5 values from database query
@@ -188,13 +210,17 @@ def create_history_trend_chart():  # chart to show diversity trends over time in
         # sentiment_label = row[3]  # Not used in this chart
         # response_time = row[4]    # Not used in this chart
 
+        # Skip models that are no longer in the active model list
+        if model not in CURRENT_MODELS:
+            continue
+
         if model not in model_data:
             model_data[model] = {"timestamps": [], "diversity": []}
         model_data[model]["timestamps"].append(timestamp)
         model_data[model]["diversity"].append(diversity)
 
     fig = go.Figure()
-    colors = ["#FF6B6B", "#4ECDC4", "#45B7D1"]
+    colors = ["#E85555", "#F0A490", "#A8CC88"]
     color_idx = 0
 
     for model, values in model_data.items():
@@ -210,10 +236,13 @@ def create_history_trend_chart():  # chart to show diversity trends over time in
         color_idx += 1
 
     fig.update_layout(
-        title="📈 Diversity Score Trend Over Time",
+        title="Diversity Score Trend Over Time",
         xaxis_title="Time",
         yaxis_title="Diversity (%)",
-        template="plotly_dark",
+        template="plotly_white",
+        paper_bgcolor="#FEF5F2",  # match page background
+        plot_bgcolor="#FFFFFF",   # white chart area
+        font=dict(color="#1A1A1A"),  # dark text for readability
         height=400,
         showlegend=True,
     )
@@ -232,17 +261,23 @@ def create_model_usage_pie_chart():  # chart to show distribution of model usage
     if not data:
         fig = go.Figure()
         fig.update_layout(
-            title="🥧 Model Usage Distribution (No data yet)",
-            template="plotly_dark",
+            title="Model Usage Distribution (No data yet)",
+            template="plotly_white",
+            paper_bgcolor="#FEF5F2",
+            plot_bgcolor="#FFFFFF",
+            font=dict(color="#1A1A1A"),
             height=400,
         )
         return fig
 
-    # Count usage per model
+    # Count usage per model, filtering to only the 3 currently configured models
     model_counts = {}
     for row in data:
         # FIXED: Access model by index (row[1]) instead of unpacking
         model = row[1]
+        # Skip old models that are no longer in the active model list
+        if model not in CURRENT_MODELS:
+            continue
         model_counts[model] = model_counts.get(model, 0) + 1
 
     fig = go.Figure(
@@ -251,14 +286,17 @@ def create_model_usage_pie_chart():  # chart to show distribution of model usage
                 labels=list(model_counts.keys()),
                 values=list(model_counts.values()),
                 hole=0.4,
-                marker_colors=["#FF6B6B", "#4ECDC4", "#45B7D1"],
+                marker_colors=["#E85555", "#F0A490", "#A8CC88"],
             )
         ]
     )
 
     fig.update_layout(
-        title="🥧 Model Usage Distribution",
-        template="plotly_dark",
+        title="Model Usage Distribution",
+        template="plotly_white",
+        paper_bgcolor="#FEF5F2",  # match page background
+        plot_bgcolor="#FFFFFF",   # white chart area
+        font=dict(color="#1A1A1A"),  # dark text for readability
         height=400,
     )
 
@@ -277,9 +315,9 @@ def create_sentiment_distribution_chart(
     colors = []
 
     sentiment_colors = {
-        "POSITIVE": "#4ECDC4",
-        "NEGATIVE": "#FF6B6B",
-        "NEUTRAL": "#FFE66D",
+        "POSITIVE": "#A8CC88",
+        "NEGATIVE": "#E85555",
+        "NEUTRAL": "#F0A490",
     }
 
     for name, data in results.items():
@@ -298,8 +336,11 @@ def create_sentiment_distribution_chart(
     if not models:
         fig = go.Figure()
         fig.update_layout(
-            title="😊 Sentiment Analysis (No data yet)",
-            template="plotly_dark",
+            title="Sentiment Analysis (No data yet)",
+            template="plotly_white",
+            paper_bgcolor="#FEF5F2",
+            plot_bgcolor="#FFFFFF",
+            font=dict(color="#1A1A1A"),
             height=300,
         )
         return fig
@@ -317,12 +358,15 @@ def create_sentiment_distribution_chart(
     )
 
     fig.update_layout(
-        title="😊 Sentiment Analysis by Model",
+        title="Sentiment Analysis by Model",
         xaxis_title="Model",
         yaxis_title="Confidence (%)",
-        yaxis_range=[0, 110],
-        template="plotly_dark",
-        height=350,
+        yaxis_range=[0, 120],      # extra headroom so confidence labels aren't clipped
+        template="plotly_white",
+        paper_bgcolor="#FEF5F2",  # match page background
+        plot_bgcolor="#FFFFFF",   # white chart area
+        font=dict(color="#1A1A1A"),  # dark text for readability
+        height=370,               # slightly taller to give more label space
         showlegend=False,
     )
 

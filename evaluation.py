@@ -1,5 +1,5 @@
 """
-📊 Text Evaluation Functions
+Text Evaluation Functions
 All metrics for evaluating text quality
 Now includes Sentiment Analysis!
 """
@@ -96,6 +96,7 @@ def analyze_sentiment(text):
     try:
         # Truncate text if too long (model limit is 512 tokens)
         truncated_text = text[:500] if len(text) > 500 else text
+        # HuggingFace sentiment pipelines always return a dict with exactly these two keys - label and score
 
         result = analyzer(truncated_text)[0]
         return {
@@ -148,7 +149,7 @@ def format_metrics_display(metrics, sentiment=None):
     Returns:
     - Formatted string
     """
-    output = "📊 **Quality Metrics:**\n"
+    output = " **Quality Metrics:**\n"
     output += f"  • Word Count: {metrics['word_count']}\n"
     output += f"  • Unique Words: {metrics['unique_words']}\n"
     output += f"  • Diversity: {metrics['diversity']}%\n"
