@@ -1,7 +1,7 @@
 ---
 title: AI Text Comparison Dashboard
-colorFrom: orange
-colorTo: red
+colorFrom: red
+colorTo: yellow
 sdk: gradio
 sdk_version: 4.8.0
 app_file: app.py
