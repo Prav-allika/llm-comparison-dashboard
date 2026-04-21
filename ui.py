@@ -440,14 +440,16 @@ def create_interface():
             # TAB 5: Settings & Info
 
             with gr.TabItem("Settings & Info"):
+                model_list_md = "\n".join(
+                    f"                    - **{name}** (`{hf_id}`)"
+                    for name, hf_id in MODEL_LIST.items()
+                )
                 gr.Markdown(
-                    """
+                    f"""
                     ### Dashboard Settings & Information
 
                     #### Currently Loaded Models:
-                    - **SmolLM3-3B** (HuggingFace 2026) — 3B parameters, good quality on Apple Silicon
-                    - **DeepSeek-R1-1.5B** (2025) — 1.5B parameters, reasoning focused
-                    - **Qwen2.5-0.5B** (Alibaba 2025) — 0.5B parameters, tiny and fast
+{model_list_md}
 
                     #### Evaluation Metrics Explained:
                     - **Diversity**: Percentage of unique words (higher = more varied vocabulary)
@@ -458,8 +460,7 @@ def create_interface():
                     #### Performance Tips:
                     - Lower max length = faster generation
                     - Higher creativity = more diverse but less coherent output
-                    - Qwen2.5-0.5B is the fastest of the three models
-                    - MPS (Apple Silicon GPU) is enabled for faster inference
+                    - The smallest model in the list is the fastest
 
                     #### Configuration:
                     Edit **config.py** to:

@@ -3,43 +3,46 @@ Configuration Settings
 All app settings in one place - easy to change!
 """
 
-# MODEL SETTINGS
+import os
 
-# Original small models (fast, work on CPU)
-MODEL_LIST = {
-    # 3B — good quality, fast on M4
-    "SmolLM3-3B (HuggingFace 2026)": "HuggingFaceTB/SmolLM3-3B",
-    # 1.5B — fast, reasoning focused
-    "DeepSeek-R1-1.5B (2025)": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
-    # 0.5B — tiny, almost instant
-    "Qwen2.5-0.5B (Alibaba 2025)": "Qwen/Qwen2.5-0.5B-Instruct",
-}
+# MODEL SETTINGS
+# HuggingFace Spaces sets SPACE_ID automatically — use it to pick memory-appropriate models.
+# Locally: larger, higher-quality models on Apple Silicon.
+# Space (16GB CPU): lightweight GPT-2 variants that fit comfortably in RAM.
+
+if os.environ.get("SPACE_ID"):
+    # HuggingFace Space — free tier is 16GB RAM, CPU only
+    MODEL_LIST = {
+        "DistilGPT-2 (82M)": "distilgpt2",
+        "GPT-2 Standard (124M)": "gpt2",
+        "GPT-2 Medium (355M)": "gpt2-medium",
+    }
+    DEVICE = "auto"
+else:
+    # Local machine — larger models, Apple Silicon GPU
+    MODEL_LIST = {
+        "SmolLM3-3B (HuggingFace 2026)": "HuggingFaceTB/SmolLM3-3B",
+        "DeepSeek-R1-1.5B (2025)": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+        "Qwen2.5-0.5B (Alibaba 2025)": "Qwen/Qwen2.5-0.5B-Instruct",
+    }
+    DEVICE = "mps"
 
 # GENERATION DEFAULTS
 
 DEFAULT_MAX_LENGTH = 100
 DEFAULT_CREATIVITY = 0.7
-MIN_LENGTH = 40
-MAX_LENGTH = 300
 MIN_LENGTH = 20
-MIN_CREATIVITY = 0.3  # minimum temperature allowed
-MAX_CREATIVITY = 1.0  # maximum temperature allowed
+MAX_LENGTH = 300
+MIN_CREATIVITY = 0.3
+MAX_CREATIVITY = 1.0
 
 # DATABASE SETTINGS
 DATABASE_NAME = "generations.db"
 HISTORY_DEFAULT_LIMIT = 20
 
 # PERFORMANCE SETTINGS
-# Enable parallel processing (faster but uses more memory)
-ENABLE_PARALLEL = True  # Set to True if you have enough RAM (8GB+)
-MAX_WORKERS = 3  # Number of parallel workers
-
-# Device settings
-# "auto" = automatically detect GPU/MPS/CPU
-# "cuda" = Force NVIDIA GPU
-# "mps" = Force Apple Silicon GPU
-# "cpu" = Force CPU only
-DEVICE = "mps"
+ENABLE_PARALLEL = True
+MAX_WORKERS = 3
 
 # SENTIMENT ANALYSIS SETTINGS
 ENABLE_SENTIMENT = True  # Enable/disable sentiment analysis
