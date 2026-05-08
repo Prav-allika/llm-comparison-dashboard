@@ -3,29 +3,12 @@ Configuration Settings
 All app settings in one place - easy to change!
 """
 
-import os
-
 # MODEL SETTINGS
-# HuggingFace Spaces sets SPACE_ID automatically — use it to pick memory-appropriate models.
-# Locally: larger, higher-quality models on Apple Silicon.
-# Space (16GB CPU): lightweight GPT-2 variants that fit comfortably in RAM.
-
-if os.environ.get("SPACE_ID"):
-    # HuggingFace Space — free tier is 16GB RAM, CPU only
-    MODEL_LIST = {
-        "DistilGPT-2 (82M)": "distilgpt2",
-        "GPT-2 Standard (124M)": "gpt2",
-        "GPT-2 Medium (355M)": "gpt2-medium",
-    }
-    DEVICE = "auto"
-else:
-    # Local machine — larger models, Apple Silicon GPU
-    MODEL_LIST = {
-        "SmolLM3-3B (HuggingFace 2026)": "HuggingFaceTB/SmolLM3-3B",
-        "DeepSeek-R1-1.5B (2025)": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
-        "Qwen2.5-0.5B (Alibaba 2025)": "Qwen/Qwen2.5-0.5B-Instruct",
-    }
-    DEVICE = "mps"
+MODEL_LIST = {
+    "SmolLM3-3B (HuggingFace 2026)": "HuggingFaceTB/SmolLM3-3B",
+    "DeepSeek-R1-1.5B (2025)": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    "Qwen2.5-0.5B (Alibaba 2025)": "Qwen/Qwen2.5-0.5B-Instruct",
+}
 
 # GENERATION DEFAULTS
 

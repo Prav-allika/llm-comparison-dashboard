@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from transformers import pipeline
 
 # Config settings for models and generation
-from config import MODEL_LIST, ENABLE_PARALLEL, MAX_WORKERS, DEVICE, ENABLE_SENTIMENT
+from config import MODEL_LIST, ENABLE_PARALLEL, MAX_WORKERS, ENABLE_SENTIMENT
 
 # Evaluation functions for text quality and sentiment
 from evaluation import evaluate_text, get_best_model, analyze_sentiment
@@ -32,45 +32,6 @@ warnings.filterwarnings("ignore")
 loaded_models = {}
 
 
-def get_device():
-    """
-    Detect the best available device for model inference.
-    Validates the configured DEVICE is actually available before using it.
-    """
-    try:
-        import torch
-
-        if DEVICE == "cuda":
-            if torch.cuda.is_available():
-                print(" CUDA GPU detected!")
-                return "cuda"
-            print(" CUDA not available, falling back to CPU")
-            return "cpu"
-
-        if DEVICE == "mps":
-            if torch.backends.mps.is_available():
-                print(" Apple Silicon GPU (MPS) detected!")
-                return "mps"
-            print(" MPS not available, falling back to CPU")
-            return "cpu"
-
-        if DEVICE == "cpu":
-            return "cpu"
-
-        # auto-detect
-        if torch.cuda.is_available():
-            print(" CUDA GPU detected!")
-            return "cuda"
-        elif torch.backends.mps.is_available():
-            print(" Apple Silicon GPU (MPS) detected!")
-            return "mps"
-        else:
-            print(" Using CPU")
-            return "cpu"
-    except Exception:
-        print(" Using CPU (torch not fully available)")
-        return "cpu"
-
 
 def load_all_models():
     """
@@ -81,8 +42,6 @@ def load_all_models():
 
     print(" Loading AI Models...")
 
-    device = get_device()
-
     for display_name, model_name in MODEL_LIST.items():
         print(f" Loading {display_name}...")
         start_time = time.time()
@@ -90,13 +49,11 @@ def load_all_models():
         try:
             import torch
 
-            dtype = torch.float16 if device in ("mps", "cuda") else torch.float32
             loaded_models[display_name] = pipeline(
                 "text-generation",
                 model=model_name,
-                device=device,
-                torch_dtype=dtype,
-                low_cpu_mem_usage=True,
+                torch_dtype=torch.bfloat16,
+                device_map="auto",
             )
             elapsed = time.time() - start_time  # elapsed time for loading this model
             print(f" {display_name} loaded in {elapsed:.2f}s!")
