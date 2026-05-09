@@ -12,7 +12,7 @@ import warnings
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # transformers pipeline for text generation
-from transformers import pipeline
+from transformers import pipeline, GenerationConfig
 
 # Config settings for models and generation
 from config import MODEL_LIST, ENABLE_PARALLEL, MAX_WORKERS, ENABLE_SENTIMENT
@@ -90,19 +90,17 @@ def generate_single(model_name, prompt, max_length, creativity):
     start_time = time.time()
 
     try:
-        output = generator(
-            prompt,
-            max_new_tokens=max_length,  # use max_new_tokens instead of max_length to avoid truncating the prompt
-            num_return_sequences=1,  # only generate one response per model for comparison
-            do_sample=True,  # enable sampling for more creative outputs
-            temperature=creativity,  # from config.py, controls randomness (0.3 = more focused, 1.0 = more creative)
-            top_p=0.92,  # nucleus sampling for better quality (top_p=0.92 means only consider the top 92% of probability mass)
-            repetition_penalty=1.2,  # penalize repeating the same words/phrases (1.0 = no penalty, >1.0 = more penalty)
-            no_repeat_ngram_size=3,  # prevent repeating the same 3-word sequences for more diverse output
-            truncation=True,  # truncate inputs that are too long for the model
-            pad_token_id=generator.tokenizer.eos_token_id,  # some models require a pad token, use EOS token as fallback
-            max_length=None,
+        gen_config = GenerationConfig(
+            max_new_tokens=max_length,
+            num_return_sequences=1,
+            do_sample=True,
+            temperature=creativity,
+            top_p=0.92,
+            repetition_penalty=1.2,
+            no_repeat_ngram_size=3,
+            pad_token_id=generator.tokenizer.eos_token_id,
         )
+        output = generator(prompt, generation_config=gen_config, truncation=True)
 
         response_text = output[0][
             "generated_text"
