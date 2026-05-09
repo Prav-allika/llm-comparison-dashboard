@@ -1,21 +1,22 @@
 # ==============================================
 # LLM Evaluation Dashboard - Requirements
+# Pinned to versions known to work locally
 # ==============================================
 
 # Web Interface
-gradio>=4.0.0
+gradio==4.8.0
 
 # AI/ML Libraries
-transformers>=4.30.0
-torch>=2.0.0
+transformers==4.35.0
+torch==2.1.0
+accelerate==1.11.0
 
 # Text Analysis
 textstat>=0.7.3
 
 # Data Visualization
-plotly>=5.18.0
+plotly==6.3.0
 
-
-accelerate>=0.20.0
-sentencepiece>=0.1.99
-protobuf>=3.20.0
+# Model tokenizers
+sentencepiece==0.1.99
+protobuf==5.29.3
